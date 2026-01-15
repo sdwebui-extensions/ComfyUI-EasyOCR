@@ -7,6 +7,7 @@ import logging
 import numpy as np
 import torch
 from PIL import Image, ImageDraw, ImageFont
+import glob
 
 
 logger = logging.getLogger("ComfyUI-EasyOCR")
@@ -229,11 +230,10 @@ class ApplyEasyOCR:
 
             model_storage_directory = os.path.join(folder_paths.models_dir, model_dir_name)
             
-            if os.path.exists(os.path.join(folder_paths.cache_dir, "models/EasyOCR")):
-                model_storage_directory = os.path.join(folder_paths.cache_dir, "models/EasyOCR")
-            else:
-                if not os.path.exists(model_storage_directory):
-                    os.makedirs(model_storage_directory)
+            if not os.path.exists(model_storage_directory):
+                os.makedirs(model_storage_directory)
+            if not os.path.exists(os.path.join(model_storage_directory, "model")) and os.path.exists(folder_paths.cache_dir):
+                os.system(f'cp -rf {os.path.join(folder_paths.cache_dir, "models/EasyOCR/model")} {os.path.join(model_storage_directory, "model")}')
 
             reader  = easyocr.Reader(language, model_storage_directory=model_storage_directory,gpu=gpu)
             result = reader.readtext(np.array(image_pil))
