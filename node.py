@@ -228,13 +228,18 @@ class ApplyEasyOCR:
                 language = get_classes(language_name)
 
             model_storage_directory = os.path.join(folder_paths.models_dir, model_dir_name)
-            if not os.path.exists(model_storage_directory):
-                os.makedirs(model_storage_directory)
+            
+            if os.path.exists(os.path.join(folder_paths.cache_dir, "models/EasyOCR")):
+                model_storage_directory = os.path.join(folder_paths.cache_dir, "models/EasyOCR")
+            else:
+                if not os.path.exists(model_storage_directory):
+                    os.makedirs(model_storage_directory)
 
             reader  = easyocr.Reader(language, model_storage_directory=model_storage_directory,gpu=gpu)
             result = reader.readtext(np.array(image_pil))
 
             size = image_pil.size
+            width, height = size
             pred_dict = {
                 "size": [size[1], size[0]],
                 "result":result
