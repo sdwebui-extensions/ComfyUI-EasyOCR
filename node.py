@@ -105,7 +105,7 @@ def plot_boxes_to_image(image_pil, tgt):
 
     # Get the current file path and use it to create a relative path to the font file
     current_file_path = os.path.dirname(os.path.abspath(__file__))
-    font_path = os.path.join(current_file_path, "docs", "PingFang Regular.ttf")
+    font_path = os.path.join(current_file_path, "docs", "PingFangRegular.ttf")
     font_size = 20
     font = ImageFont.truetype(font_path, font_size)
 
@@ -232,8 +232,8 @@ class ApplyEasyOCR:
             
             if not os.path.exists(model_storage_directory):
                 os.makedirs(model_storage_directory)
-            if not os.path.exists(os.path.join(model_storage_directory, "model")) and os.path.exists(folder_paths.cache_dir):
-                os.system(f'cp -rf {os.path.join(folder_paths.cache_dir, "models/EasyOCR/model")} {os.path.join(model_storage_directory, "model")}')
+            if not os.path.exists(os.path.join(model_storage_directory, "craft_mlt_25k.pth")) and os.path.exists(folder_paths.cache_dir):
+                os.system(f'cp -rf {os.path.join(folder_paths.cache_dir, "models/EasyOCR/model/*")} {model_storage_directory}/')
 
             reader  = easyocr.Reader(language, model_storage_directory=model_storage_directory,gpu=gpu)
             result = reader.readtext(np.array(image_pil))
